@@ -4,33 +4,12 @@ import os from 'os'
 let handler = async (m, { conn, usedPrefix }) => {
   try {
 
-    // Íconos para VS
     const vsIcons = {
       fem: "🌸",
       masc: "☠️",
       mixto: "⚡"
     }
 
-    // Modalidades permitidas
-    const modalidades = [
-      { name: "scrim", icon: "🎮" },
-      { name: "cuadrilatero", icon: "🥊" },
-      { name: "guerra", icon: "⚔️" },
-      { name: "guerra-de-clanes", icon: "🛡️" }
-    ]
-
-    // Países permitidos
-    const paises = [
-      { code: "ar", icon: "🇦🇷" },
-      { code: "pe", icon: "🇵🇪" },
-      { code: "co", icon: "🇨🇴" },
-      { code: "mx", icon: "🇲🇽" }
-    ]
-
-    // Comando Stalk
-    const ffstalk = "💬 FFStalk → " + usedPrefix + "ffstalk <id>"
-
-    // Construcción del menú
     let text = `
 ╭━━━〔 🌸 Alya Bot 🌸 〕━━━╮
 ┃ 💫 Submenú: MENUFF
@@ -40,21 +19,13 @@ let handler = async (m, { conn, usedPrefix }) => {
 ╰━━━━━━━━━━━━━━━━━━━━━━━╯
 
 ╭───〔 LISTA VS 〕───────❐
-┃ ${vsIcons.fem} VS Fem → ${usedPrefix}vs <hora> <am/pm> <país> <modalidad> fem
-┃ ${vsIcons.masc} VS Masc → ${usedPrefix}vs <hora> <am/pm> <país> <modalidad> masc
-┃ ${vsIcons.mixto} VS Mixto → ${usedPrefix}vs <hora> <am/pm> <país> <modalidad> mixto
+┃ ${vsIcons.fem} VS Fem → ${usedPrefix}vs <hora> <am/pm> fem
+┃ ${vsIcons.masc} VS Masc → ${usedPrefix}vs <hora> <am/pm> masc
+┃ ${vsIcons.mixto} VS Mixto → ${usedPrefix}vs <hora> <am/pm> mixto
 ╰─────────────────────────❐
 
-╭──〔 MODALIDADES DISP. 〕──╮
-${modalidades.map(m => `┃ ${m.icon} ${m.name}`).join('\n')}
-╰────────────────────────────╯
-
-╭────〔 PAÍSES DISP. 〕──────╮
-${paises.map(p => `┃ ${p.icon} ${p.code}`).join('\n')}
-╰────────────────────────────╯
-
 ╭────〔 OTROS COMANDOS 〕────╮
-┃ ${ffstalk}
+┃ 💬 FFStalk → ${usedPrefix}ffstalk <id>
 ╰━━━━━━━━━━━━━━━━━━━━━━━⬣
 `.trim()
 
