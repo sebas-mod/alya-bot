@@ -3,51 +3,59 @@ import os from 'os'
 
 let handler = async (m, { conn, usedPrefix }) => {
   try {
-    // Lista de comandos que pertenecen a MENUFF
-    const menuFFCommands = [
-      'inmasc4','infem4','inmixto4',
-      'inmasc6','infem6','inmixto6',
-      'bermuda','purgatorio','kalahari',
-      'nexterra','alpes',
-      'encuesta','sala'
+
+    // Íconos para VS
+    const vsIcons = {
+      fem: "🌸",
+      masc: "☠️",
+      mixto: "⚡"
+    }
+
+    // Modalidades permitidas
+    const modalidades = [
+      { name: "scrim", icon: "🎮" },
+      { name: "cuadrilatero", icon: "🥊" },
+      { name: "guerra", icon: "⚔️" },
+      { name: "guerra-de-clanes", icon: "🛡️" }
     ]
 
-    // Filtramos los plugins que existen en global.plugins
-    const help = Object.values(global.plugins)
-      .filter(plugin => !plugin.disabled)
-      .map(plugin => ({
-        help: Array.isArray(plugin.tags) ? plugin.help : [plugin.help],
-        tags: Array.isArray(plugin.tags) ? plugin.tags : [plugin.tags],
-        prefix: "customPrefix" in plugin,
-        premium: plugin.premium,
-        mods: plugin.mods,
-        owner: plugin.owner,
-        admin: plugin.admin,
-        enabled: !plugin.disabled,
-      }))
+    // Países permitidos
+    const paises = [
+      { code: "ar", icon: "🇦🇷" },
+      { code: "pe", icon: "🇵🇪" },
+      { code: "co", icon: "🇨🇴" },
+      { code: "mx", icon: "🇲🇽" }
+    ]
 
-    // Tomamos solo los plugins que sean del submenú MENUFF
-    let menuFF = help.filter(p => {
-      if (!p.help) return false
-      // Comprobamos si el comando está en menuFFCommands
-      return p.help.some(h => menuFFCommands.includes(h))
-    })
+    // Comando Stalk
+    const ffstalk = "💬 FFStalk → " + usedPrefix + "ffstalk <id>"
 
-    // Construimos el texto dinámico
+    // Construcción del menú
     let text = `
 ╭━━━〔 🌸 Alya Bot 🌸 〕━━━╮
 ┃ 💫 Submenú: MENUFF
 ┃ 🧩 Categoría: INFO
-┃ 📜 Comandos: ${menuFF.length}
 ┃ 🕒 Activo: ${clockString(process.uptime() * 1000)}
 ┃ ⚙️ Sistema: ${os.platform().toUpperCase()}
 ╰━━━━━━━━━━━━━━━━━━━━━━━╯
 
-╭╼[ LISTA DE COMANDOS ]
-${menuFF.map(p => 
-      p.help.map(c => `┃➺ ${usedPrefix}${c}`).join('\n')
-    ).join('\n')}
-╰━━━━━━⋆★⋆━━━━━━⬣
+╭───〔 LISTA VS 〕───────❐
+┃ ${vsIcons.fem} VS Fem → ${usedPrefix}vs <hora> <am/pm> <país> <modalidad> fem
+┃ ${vsIcons.masc} VS Masc → ${usedPrefix}vs <hora> <am/pm> <país> <modalidad> masc
+┃ ${vsIcons.mixto} VS Mixto → ${usedPrefix}vs <hora> <am/pm> <país> <modalidad> mixto
+╰─────────────────────────❐
+
+╭──〔 MODALIDADES DISP. 〕──╮
+${modalidades.map(m => `┃ ${m.icon} ${m.name}`).join('\n')}
+╰────────────────────────────╯
+
+╭────〔 PAÍSES DISP. 〕──────╮
+${paises.map(p => `┃ ${p.icon} ${p.code}`).join('\n')}
+╰────────────────────────────╯
+
+╭────〔 OTROS COMANDOS 〕────╮
+┃ ${ffstalk}
+╰━━━━━━━━━━━━━━━━━━━━━━━⬣
 `.trim()
 
     await conn.sendMessage(m.chat, { text }, { quoted: m })
@@ -59,7 +67,7 @@ ${menuFF.map(p =>
 }
 
 handler.help = ['menuff']
-handler.tags = ['info']  // ✅ Aquí va info
+handler.tags = ['info']
 handler.command = /^menuff$/i
 
 export default handler
