@@ -1,87 +1,70 @@
 const partidas = {};
 
 const handler = async (m, { conn, args, command }) => {
-  if (args.length < 5) {
+
+  if (args.length < 4) {
     return conn.reply(
       m.chat,
       `
-📢 *ANUNCIO IMPORTANTE*
+📢 *USO CORRECTO DEL COMANDO VS*
 
-Para crear una lista de VS usa el formato:
+Formato:
+.${command} <hora> <país> <modalidad libre> <cantidad>
 
-.${command} <hora> <am/pm> <país> <modalidad> <tipo>
+Ejemplos:
+.${command} 20:00 ar vs de clan 4
+.${command} 21:30 mx scrim mixto 5
+.${command} 18:00 pe guerra 4
 
-*📍 Ejemplos:*
-.${command} 10:00 pm ar scrim mixto  
-.${command} 9:30 pm pe guerra fem  
-.${command} 8:00 pm mx cuadrilatero masc
-
-*🌎 Países:* 🇦🇷 ar | 🇵🇪 pe | 🇨🇴 co | 🇲🇽 mx  
-*🎮 Modalidades:* scrim | cuadrilatero | guerra | guerra-de-clanes  
-*👥 Tipo:* fem | masc | mixto
+Países: ar, pe, co, mx
+Cantidad = jugadores titulares.
+El bot sumará 2 suplentes automáticamente.
 `.trim(),
       m
     );
   }
 
-  const [hora, formato, pais, modalidad, tipo] = args.map((a) => a.toLowerCase());
+  const hora = args[0];
+  const pais = args[1].toLowerCase();
+  const cantidad = parseInt(args[args.length - 1]);
+  const modalidad = args.slice(2, -1).join(" "); // Modalidad libre
 
-  if (!hora.match(/^\d{1,2}:\d{2}$/)) return m.reply("⏰ *Formato de hora inválido.* Ej: 10:00");
-  if (!/(am|pm)/i.test(formato)) return m.reply("⚠️ *Formato inválido.* Usa AM o PM.");
-  if (!["ar", "pe", "co", "mx"].includes(pais)) return m.reply("🌍 *País inválido.* Usa ar, pe, co o mx.");
-  if (!["scrim", "cuadrilatero", "guerra", "guerra-de-clanes"].includes(modalidad))
-    return m.reply("🎮 *Modalidad inválida.* Usa scrim, cuadrilatero, guerra o guerra-de-clanes.");
-  if (!["fem", "masc", "mixto"].includes(tipo)) return m.reply("👥 *Tipo inválido.* Usa fem, masc o mixto.");
+  if (!hora.match(/^\d{1,2}:\d{2}$/))
+    return m.reply("⏰ *Formato de hora inválido.* Ej: 20:00");
+
+  if (!["ar", "pe", "co", "mx"].includes(pais))
+    return m.reply("🇨🇱 *País inválido.* Usa ar, pe, co o mx.");
+
+  if (isNaN(cantidad) || cantidad < 2 || cantidad > 10)
+    return m.reply("👥 *Cantidad inválida.* Min: 2, Max: 10");
 
   const partidaId = `${m.chat}-${Date.now()}`;
 
   const horarios = {
-    AR: pais === "ar" ? `${hora} ${formato}` : "22:00",
-    PE: pais === "pe" ? `${hora} ${formato}` : "20:00",
-    CO: pais === "co" ? `${hora} ${formato}` : "21:00",
-    MX: pais === "mx" ? `${hora} ${formato}` : "19:00",
+    AR: pais === "ar" ? `${hora}` : "--:--",
+    PE: pais === "pe" ? `${hora}` : "--:--",
+    CO: pais === "co" ? `${hora}` : "--:--",
+    MX: pais === "mx" ? `${hora}` : "--:--",
   };
-
-  let deco, color, titulo;
-  switch (tipo) {
-    case "fem":
-      deco = "🌸";
-      color = "💖";
-      titulo = "💞 LISTA VS FEM 💞";
-      break;
-    case "masc":
-      deco = "🔥";
-      color = "💀";
-      titulo = "🔥 LISTA VS MASC 🔥";
-      break;
-    case "mixto":
-      deco = "⚡";
-      color = "🌈";
-      titulo = "⚡ LISTA VS MIXTO ⚡";
-      break;
-  }
 
   partidas[partidaId] = {
     id: partidaId,
     chat: m.chat,
     jugadores: [],
     suplentes: [],
-    tipo,
-    deco,
-    color,
+    cantidad,
     modalidad,
-    hora: `${hora} ${formato}`,
     pais,
     horarios,
     msgId: null,
   };
 
-  const mensaje = generarMensaje(partidas[partidaId], titulo);
+  const mensaje = generarMensaje(partidas[partidaId]);
   const sent = await conn.sendMessage(
     m.chat,
     {
       text: mensaje,
-      footer: `Reacciona con cualquier emoji para anotarte automáticamente. Quitar la reacción te quitará de la lista.`,
+      footer: `Reacciona con un emoji para anotarte. Quitar la reacción te elimina.`,
     },
     { quoted: m }
   );
@@ -89,8 +72,8 @@ Para crear una lista de VS usa el formato:
   partidas[partidaId].msgId = sent.key.id;
 };
 
-// Generar mensaje decorado
-function generarMensaje(p, titulo) {
+// GENERADOR DE MENSAJE
+function generarMensaje(p) {
   const horariosTxt = Object.entries(p.horarios)
     .map(([pais, h]) => {
       const flag = { AR: "🇦🇷", PE: "🇵🇪", CO: "🇨🇴", MX: "🇲🇽" }[pais];
@@ -98,36 +81,39 @@ function generarMensaje(p, titulo) {
     })
     .join("\n");
 
-  const escuadra = p.jugadores.map((x) => `🥷 ${x}`).join("\n") || "—";
-  const suplentes = p.suplentes.map((x) => `🥷 ${x}`).join("\n") || "—";
+  const escuadra = p.jugadores
+    .map((x) => `🥷 ${x}`)
+    .join("\n") || "—";
+
+  const suplentes = p.suplentes
+    .map((x) => `🥷 ${x}`)
+    .join("\n") || "—";
 
   return `
-${p.color}━━━━━━━━━━━━━━━━━━━${p.color}
-${p.deco} *${titulo}* ${p.deco}
-${p.color}━━━━━━━━━━━━━━━━━━━${p.color}
+🔥 *LISTA VS* 🔥
 
-🕓 *Hora:* ${p.hora}  
-🎮 *Modalidad:* ${p.modalidad.toUpperCase()}  
+🕓 *Hora:* ${horariosTxt}
+🌍 *País:* ${p.pais.toUpperCase()}
+🎮 *Modalidad:* ${p.modalidad}
+👥 *Jugadores:* ${p.cantidad} titulares + 2 suplentes
 
-${horariosTxt}
-
-👤 *ESCUADRA*
+👤 *TITULARES*
 ${escuadra}
 
 👥 *SUPLENTES*
 ${suplentes}
 
-${p.color}━━━━━━━━━━━━━━━━━━━${p.color}
+🔥━━━━━━━━━━━━━━━━━━🔥
 `.trim();
 }
 
-// REACCIONES ✅ FUNCIONAL EN POR-VERSE
+// SISTEMA DE REACCIONES
 handler.before = async (m, { conn }) => {
   const reaction = m?.message?.reactionMessage;
   if (!reaction) return;
 
   const msgReacted = reaction.key.id;
-  const emoji = reaction.text; 
+  const emoji = reaction.text;
 
   const sender = m.sender;
   const name = global.db.data.users[sender]?.name || (await conn.getName(sender));
@@ -137,12 +123,12 @@ handler.before = async (m, { conn }) => {
 
   if (emoji) {
     if (!partida.jugadores.includes(name) && !partida.suplentes.includes(name)) {
-      if (partida.jugadores.length < 4) {
+      if (partida.jugadores.length < partida.cantidad) {
         partida.jugadores.push(name);
       } else if (partida.suplentes.length < 2) {
         partida.suplentes.push(name);
       } else {
-        return conn.sendMessage(partida.chat, { text: "✅ Lista llena, suerte en el VS!" });
+        return conn.sendMessage(partida.chat, { text: "⚠️ Lista llena!" });
       }
     }
   } else {
@@ -150,14 +136,7 @@ handler.before = async (m, { conn }) => {
     partida.suplentes = partida.suplentes.filter(x => x !== name);
   }
 
-  const titulo =
-    partida.tipo === "fem"
-      ? "💞 LISTA VS FEM 💞"
-      : partida.tipo === "masc"
-      ? "🔥 LISTA VS MASC 🔥"
-      : "⚡ LISTA VS MIXTO ⚡";
-
-  const newMsg = generarMensaje(partida, titulo);
+  const newMsg = generarMensaje(partida);
 
   await conn.sendMessage(partida.chat, {
     text: newMsg,
@@ -165,7 +144,7 @@ handler.before = async (m, { conn }) => {
   });
 };
 
-handler.help = ["vs <hora> <am/pm> <país> <modalidad> <tipo>"];
+handler.help = ["vs <hora> <pais> <modalidad> <cantidad>"];
 handler.tags = ["ff"];
 handler.command = /^vs$/i;
 handler.group = true;
