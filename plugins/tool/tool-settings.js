@@ -18,7 +18,7 @@ let handler = async (m, { conn, isOwner, isAdmin, args, usedPrefix, command }) =
         { key: "antiVideo", scope: "chat", name: "🎥 Anti Videos" },
         { key: "autoApprove", scope: "chat", name: "✅ Auto Aprobar" },
         { key: "teks", scope: "chat", name: "💬 Responder Texto" },
-
+        { key: "nsfw", scope: "chat", name: "🔞 Contenido NSFW" },
         { key: "self", scope: "bot", name: "🤖 Modo Self" },
         { key: "gconly", scope: "bot", name: "👥 Solo Grupos" },
         { key: "queque", scope: "bot", name: "📨 Cola de Mensajes" },
