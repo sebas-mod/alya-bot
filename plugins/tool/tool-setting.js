@@ -18,7 +18,7 @@ let handler = async (m, { conn, isOwner, isAdmin, args, usedPrefix, command }) =
         { key: "antiVideo", scope: "chat", name: "🎥 Anti Videos" },
         { key: "autoApprove", scope: "chat", name: "✅ Auto Aprobar" },
         { key: "teks", scope: "chat", name: "💬 Responder Texto" },
-
+        { key: "nsfw", scope: "chat", name: "🔞 Contenido NSFW" },
         { key: "self", scope: "bot", name: "🤖 Modo Self" },
         { key: "gconly", scope: "bot", name: "👥 Solo Grupos" },
         { key: "queque", scope: "bot", name: "📨 Cola de Mensajes" },
@@ -35,14 +35,18 @@ let handler = async (m, { conn, isOwner, isAdmin, args, usedPrefix, command }) =
 
     let raw = m.selectedButtonId || m.text || "";
     let [cmd, mode, fiturKey] = raw.trim().split(" ");
+
     if (cmd === ".setting" && fiturKey) {
         let fitur = features.find((f) => f.key === fiturKey);
         if (!fitur) return m.reply("❌ *La función no existe.*");
+
         if (!["enable", "disable"].includes(mode))
             return m.reply(
                 `⚠️ *Formato incorrecto.*\nUsa: ${usedPrefix + command} enable|disable [función]`
             );
+
         let isEnable = mode === "enable";
+
         if (fitur.scope === "chat") {
             if (!(isAdmin || isOwner)) return global.dfail("admin", m, conn);
             chat[fitur.key] = isEnable;
@@ -50,12 +54,15 @@ let handler = async (m, { conn, isOwner, isAdmin, args, usedPrefix, command }) =
             if (!isOwner) return global.dfail("owner", m, conn);
             bot[fitur.key] = isEnable;
         }
+
         return m.reply(
             `🍣 *La función ${fitur.name} ahora está ${isEnable ? "ACTIVADA 🍱" : "DESACTIVADA 🍵"}!*`
         );
     }
+
     if (!args[0]) {
         let availableFeatures = isOwner ? features : features.filter((f) => f.scope === "chat");
+
         let buttons = [
             {
                 name: "single_select",
@@ -102,6 +109,7 @@ let handler = async (m, { conn, isOwner, isAdmin, args, usedPrefix, command }) =
                 }),
             },
         ];
+
         return conn.sendMessage(
             m.chat,
             {
