@@ -34,6 +34,7 @@ var handler = async (m, { conn, usedPrefix, command }) => {
 
 handler.help = ['girls'];
 handler.tags = ['nsfw'];
+handler.nsfw = true
 handler.command = /^(girls|girl)$/i;
 
 export default handler;
