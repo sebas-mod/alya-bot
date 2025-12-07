@@ -65,6 +65,7 @@ let handler = async (m, { conn, usedPrefix, command }) => {
 
 handler.help = ['animehot']
 handler.tags = ['nsfw']
+handler.nsfw = true
 handler.command = /^animehot|hotanime$/i
 
 export default handler
