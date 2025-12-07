@@ -169,8 +169,9 @@ let handler = async (m, { conn, text, usedPrefix, command }) => {
     );
 };
 
-handler.tags = ['nsfw'];
+
 handler.help = ['nhentai'];
+handler.tags = ['nsfw'];
 handler.command = /^(nhentai)$/i;
 handler.group = true;
 
