@@ -2,7 +2,7 @@ import fetch from 'node-fetch'
 
 let handler = async (m, { conn, usedPrefix, command }) => {
   
-  m.reply('✦ Buscando animes +18, espere un momento...')
+  m.reply('✦ Buscando anime +18 aleatorio, espere un momento...')
 
   try {
     let res = await fetch(`https://gawrgura-api.onrender.com/anime/animedao/hot`)
@@ -12,37 +12,50 @@ let handler = async (m, { conn, usedPrefix, command }) => {
 
     let lista = json.results
 
-    // FILTRAR SOLO +18 (NSFW)
+    // FILTRAR SOLO +18 (NSFW) USANDO TITULO Y TAGS
     let nsfw = lista.filter(x => {
       let t = (x.title || "").toLowerCase()
-      return t.includes("18") || 
-             t.includes("+18") || 
-             t.includes("hentai") ||
-             t.includes("uncensored") ||
-             t.includes("adult") ||
-             t.includes("ero")
+      let tags = (x.tags || []).join(" ").toLowerCase()
+
+      return (
+        // por título
+        t.includes("18") ||
+        t.includes("+18") ||
+        t.includes("hentai") ||
+        t.includes("uncensored") ||
+        t.includes("adult") ||
+        t.includes("ero") ||
+
+        // por tags
+        tags.includes("18") ||
+        tags.includes("+18") ||
+        tags.includes("hentai") ||
+        tags.includes("uncensored") ||
+        tags.includes("adult") ||
+        tags.includes("ero")
+      )
     })
 
     if (nsfw.length === 0) return m.reply(`✦ No encontré contenido +18 disponible ahora mismo.`)
 
-    // Enviar cada resultado en un mensaje separado
-    for (let anime of nsfw) {
-      
-      let txt = `🔥 *ANIME +18 ENCONTRADO*\n\n`
-      txt += `✦ *Título:* ${anime.title || "Desconocido"}\n`
-      txt += `✦ *Episodio:* ${anime.episode || "N/A"}\n`
-      txt += `✦ *Subtítulo:* ${anime.sub || "N/A"}\n`
-      txt += `✦ *URL:* ${anime.url || "N/A"}\n`
+    // SELECCIONAR 1 RANDOM
+    let anime = nsfw[Math.floor(Math.random() * nsfw.length)]
 
-      await conn.sendMessage(
-        m.chat,
-        {
-          image: { url: anime.img },
-          caption: txt
-        },
-        { quoted: m }
-      )
-    }
+    let txt = `🔥 *ANIME +18 ALEATORIO ENCONTRADO*\n\n`
+    txt += `✦ *Título:* ${anime.title || "Desconocido"}\n`
+    txt += `✦ *Episodio:* ${anime.episode || "N/A"}\n`
+    txt += `✦ *Subtítulo:* ${anime.sub || "N/A"}\n`
+    txt += `✦ *Tags:* ${(anime.tags || []).join(", ") || "N/A"}\n`
+    txt += `✦ *URL:* ${anime.url || "N/A"}\n`
+
+    await conn.sendMessage(
+      m.chat,
+      {
+        image: { url: anime.img },
+        caption: txt
+      },
+      { quoted: m }
+    )
 
   } catch (e) {
     console.log(e)
