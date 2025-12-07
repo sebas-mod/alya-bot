@@ -43,6 +43,7 @@ let handler = async (m, { conn, usedPrefix, command, isOwner, isMods, isPrems, a
             "downloader",
             "group",
             "info",
+            "nsfw",
             "internet",
             "juegos",
             "rpg",
@@ -59,6 +60,7 @@ let handler = async (m, { conn, usedPrefix, command, isOwner, isMods, isPrems, a
                 downloader: "📲 Menú de Descargas",
                 group: "👥️ Menú de Grupos",
                 info: "📖 Menú de Información",
+                nsfw: "🔥menu de +18",
                 internet: "💌 Menú de Internet",
                 juegos: "🎮menu juegos",
                 rpg: "⛏️ Menú Rpg",
@@ -72,6 +74,7 @@ let handler = async (m, { conn, usedPrefix, command, isOwner, isMods, isPrems, a
         if (teks == "info") tags = { info: "📖 Menú de Información" };
         if (teks == "internet") tags = { internet: "🌐 Menú de Internet" };
         if (teks == "rpg") tags = { juego: "🎮 Menú juegos" };
+        if (teks == "nsfw") tags = { nsfw: "🎮 Menú +18" };
         if (teks == "rpg") tags = { rpg: "⛏️ Menú Rpg" };
         if (teks == "maker") tags = { maker: "👑 Menú de Creadores" };
         if (teks == "owner") tags = { owner: "😎 Menú del Dueño" };
