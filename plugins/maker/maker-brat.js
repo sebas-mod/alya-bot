@@ -14,12 +14,14 @@ var handler = async (m, { conn, args, text, usedPrefix, command }) => {
         return m.reply(`*• Ejemplo :* ${usedPrefix + command} stickerbrat`);
     }
 
-    // API correcta
-    let apiUrl = `https://gawrgura-api.onrender.com/imagecreator/brat?text=${encodeURIComponent(ps)}`;
+    // Tu API KEY
+    let apikey = "may-dcfcae78";
+
+    // API con api key incluida
+    let apiUrl = `https://gawrgura-api.onrender.com/imagecreator/brat?apikey=${apikey}&text=${encodeURIComponent(ps)}`;
 
     try {
 
-        // Crear sticker DIRECTAMENTE desde la URL (sin buffer)
         const sticker = new WSF.Sticker(apiUrl, {
             pack: "Alya Bot",
             author: "LuisSebas",
