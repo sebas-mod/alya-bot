@@ -20,7 +20,8 @@ let handler = async (m, { conn }) => {
 }
 
 handler.help = ['18cosplay']
-handler.tags = ['nsfw'] // ✅ AQUÍ COLOCADO CORRECTAMENTE
+handler.tags = ['nsfw'] 
+handler.nsfw = true
 handler.command = /^(18cosplay)$/i
 
 export default handler
