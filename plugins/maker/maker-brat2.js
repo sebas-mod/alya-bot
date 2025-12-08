@@ -211,7 +211,7 @@ let handler = async (m, { conn, text, usedPrefix, command }) => {
 };
 
 handler.help = ['brat2'];
-handler.tags = ['sticker'];
+handler.tags = ['maker'];
 handler.command = ['brat2'];
 handler.group = true;
 
