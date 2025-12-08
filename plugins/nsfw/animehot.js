@@ -8,14 +8,13 @@ let handler = async (m, { conn, usedPrefix, command }) => {
     let res = await fetch(`https://gawrgura-api.onrender.com/anime/animedao/hot`)
     let json = await res.json()
 
-    if (!json.status || !json.results) throw m.reply("✦ Error API")
+    if (!json.status || !json.result) throw m.reply("✦ Error API")
 
-    let lista = json.results
+    let lista = json.result
 
-    // FILTRAR SOLO +18 (NSFW) USANDO TITULO Y TAGS
+    // FILTRAR SOLO +18 (NSFW) USANDO TITULO
     let nsfw = lista.filter(x => {
       let t = (x.title || "").toLowerCase()
-      let tags = (x.tags || []).join(" ").toLowerCase()
 
       return (
         // por título
@@ -24,15 +23,7 @@ let handler = async (m, { conn, usedPrefix, command }) => {
         t.includes("hentai") ||
         t.includes("uncensored") ||
         t.includes("adult") ||
-        t.includes("ero") ||
-
-        // por tags
-        tags.includes("18") ||
-        tags.includes("+18") ||
-        tags.includes("hentai") ||
-        tags.includes("uncensored") ||
-        tags.includes("adult") ||
-        tags.includes("ero")
+        t.includes("ero")
       )
     })
 
@@ -44,14 +35,13 @@ let handler = async (m, { conn, usedPrefix, command }) => {
     let txt = `🔥 *ANIME +18 ALEATORIO ENCONTRADO*\n\n`
     txt += `✦ *Título:* ${anime.title || "Desconocido"}\n`
     txt += `✦ *Episodio:* ${anime.episode || "N/A"}\n`
-    txt += `✦ *Subtítulo:* ${anime.sub || "N/A"}\n`
-    txt += `✦ *Tags:* ${(anime.tags || []).join(", ") || "N/A"}\n`
-    txt += `✦ *URL:* ${anime.url || "N/A"}\n`
+    txt += `✦ *Subtítulo:* ${anime.subtitle || "N/A"}\n`
+    txt += `✦ *URL:* ${anime.link || "N/A"}\n`
 
     await conn.sendMessage(
       m.chat,
       {
-        image: { url: anime.img },
+        image: { url: anime.image },
         caption: txt
       },
       { quoted: m }
