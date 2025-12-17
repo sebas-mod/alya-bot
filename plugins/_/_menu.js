@@ -145,21 +145,21 @@ END:VCARD`;
 *╭─┈・┈・୨ ☠️ ୧・┈・┈─╮*
 > *˚₊‧ 𝑰𝑵𝑭𝑶 𝑫𝑬𝑳 𝑩𝑶𝑻 ‧₊˚*
 > 
->  ▸ 👤 *Nombre* : ${conn.user.name}
->  ▸ 📲 *Versión* : ${Version}
->  ▸ ☠️ *Modo* : ${mode}
->  ▸ 🍩 *Base de Datos* : ${bytesToMB(fs.readFileSync("./database.db").byteLength)} Mb
+>  ▸ 🧑‍🎄 *Nombre* : ${conn.user.name}
+>  ▸ ❄️ *Versión* : ${Version}
+>  ▸ 🎄 *Modo* : ${mode}
+>  ▸ 🎁 *Base de Datos* : ${bytesToMB(fs.readFileSync("./database.db").byteLength)} Mb
 >  ▸ 🤖 *Tiempo Activo* : ${uptime}
->  ▸ 🌐 *Uptime SV* : ${muptime}
->  ▸ 👥️ *Comandos Hoy* : ${commandToday}
+>  ▸ ⛄ *Uptime SV* : ${muptime}
+>  ▸ 🔔 *Comandos Hoy* : ${commandToday}
 *╰─┈・┈・┈・┈・┈・┈─╯*
 `.trimStart();
 
         let lists = arrayMenu.map((v, i) => {
-            let icon = icons[i] || "⭐";
+            let icon = icons[i] || "🎄";
             return {
                 title: `${icon} Menu ${capitalize(v)}`,
-                description: `${icon} ${v} está disponible en alya bot 🌸`,
+                description: `${icon} ${v} está disponible en alya bot 🎄`,
                 id: `${usedPrefix + command} ${v}`,
             };
         });
@@ -167,7 +167,7 @@ END:VCARD`;
             return await conn.sendMessage(
                 m.chat,
                 {
-                    document: { url: "https://files.catbox.moe/syug0p.jpg" },
+                    document: { url: "https://raw.githubusercontent.com/sebas-mod/imagen/main/20251217_1324_image.png" },
                     mimetype: "application/pdf",
                     fileName: `🌸 ${global.config.watermark}`,
                     fileLength: 0,
@@ -180,7 +180,7 @@ END:VCARD`;
                             title: global.config.author,
                             body: subtitle,
                             mediaType: 1,
-                            thumbnailUrl: "https://files.catbox.moe/syug0p.jpg",
+                            thumbnailUrl: "https://raw.githubusercontent.com/sebas-mod/imagen/main/20251217_1324_image.png",
                             sourceUrl: global.config.website,
                             renderLargerThumbnail: true,
                         },
@@ -290,7 +290,7 @@ END:VCARD`;
         await conn.sendMessage(
             m.chat,
             {
-                document: { url: "https://files.catbox.moe/syug0p.jpg" },
+                document: { url: "https://raw.githubusercontent.com/sebas-mod/imagen/main/20251217_1324_image.png" },
                 mimetype: "application/pdf",
                 fileName: `🌸 ${global.config.watermark}.pdf`,
                 fileLength: 0,
@@ -303,7 +303,7 @@ END:VCARD`;
                         title: global.config.author,
                         body: subtitle,
                         mediaType: 1,
-                        thumbnailUrl: "https://files.catbox.moe/syug0p.jpg",
+                        thumbnailUrl: "https://raw.githubusercontent.com/sebas-mod/imagen/main/20251217_1324_image.png",
                         sourceUrl: global.config.website,
                         renderLargerThumbnail: true,
                     },
