@@ -367,7 +367,7 @@ let user = global.db.data.users[m.sender];
                                 body: global.config.watermark,
                                 mediaType: 1,
                                 thumbnailUrl:
-                                    "https://qu.ax/uyykM.jpg",
+                                    "https://raw.githubusercontent.com/sebas-mod/imagen/main/fondo.jpg",
                                 renderLargerThumbnail: true,
                             },
                         },
@@ -412,7 +412,7 @@ let user = global.db.data.users[m.sender];
                 title: "🍡 ACCESO DENEGADO",
                 body: global.config.watermark,
                 mediaType: 1,
-                thumbnailUrl: "https://qu.ax/uyykM.jpg",
+                thumbnailUrl: "https://raw.githubusercontent.com/sebas-mod/imagen/main/fondo.jpg",
                 renderLargerThumbnail: true,
             },
         },
