@@ -10,20 +10,6 @@
  *
  * @copyright   © 2024 - 2025 Naruya Izumi
  * @license     Apache License 2.0
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at:
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *
- * IMPORTANT NOTICE:
- * - Do not sell or redistribute this source code for commercial purposes.
- * - Do not remove or alter original credits under any circumstances.
  */
 
 import "dotenv/config";
@@ -38,11 +24,11 @@ global.config = {
     website: process.env.WEBSITE,
 
     /*========== DEVELOPER MODE ==========*/
-    DEVELOPER: process.env.IS_IZUMI === "true",
+    DEVELOPER: true,
 
     /*============= PAIRING =============*/
-    pairingNumber: process.env.PAIRING_NUMBER,
-    pairingAuth: process.env.PAIRING_AUTH === "true",
+    pairingNumber: "5491140951814",
+    pairingAuth: true,
 
     /*============== API ==============*/
     APIs: {
@@ -76,8 +62,8 @@ global.config = {
     },
 
     /*============== MESSAGES ==============*/
- watermark: "𝐀𝐋𝐘𝐀 𝐁𝐎𝐓",
-author: "© 𝚂𝚎𝚋𝚊𝚜 𝙼𝙳",
-stickpack: "𝐀𝐋𝐘𝐀 𝐁𝐎𝐓",
-stickauth: "© 𝚂𝚎𝚋𝚊𝚜 𝙼𝙳",
+    watermark: "𝐀𝐋𝐘𝐀 𝐁𝐎𝐓",
+    author: "© 𝚂𝚎𝚋𝚊𝚜 𝙼𝙳",
+    stickpack: "𝐀𝐋𝐘𝐀 𝐁𝐎𝐓",
+    stickauth: "© 𝚂𝚎𝚋𝚊𝚜 𝙼𝙳",
 };
